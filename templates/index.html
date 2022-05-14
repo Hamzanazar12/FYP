@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>News Api</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	
+	<style type="text/css">
+		
+		#loader {
+			height: 100vh;
+			align-items: center;
+			display: flex;
+			justify-content: center;
+
+		}
+
+		.progress {
+			display: none;
+		}
+
+		.errorMsg {
+			font-size: 34px;
+			height: 100vh;
+			align-items: center;
+			display: flex;
+			justify-content: center;
+		}
+		
+	</style>
+</head>
+
+<body>
+	<div class="navbar-fixed">
+		<nav class="teal">
+			<div class="nav-wrapper">
+				<div class="container">
+					<a href="#" class="brand-logo">News Api</a>
+					<ul id="nav-mobile" class="right hide-on-med-and-down">
+						<li class="active"><a href="index.html">News</a></li>
+						<li><a href="about.html">About us</a></li>
+						<li><a href="contact.html">Contact us</a></li>
+					</ul>
+				</div>
+
+			</div>
+		</nav>
+	</div>
+
+
+	<div class="container">
+		<h4>Please Access the <b>app.js</b> and replace that fake Api key with your own api key.</h4>
+		<div class="row">
+			<div id="newsResults"></div>
+		</div>
+
+		<div id="loader">
+			<div class="progress">
+				<div class="indeterminate"></div>
+			</div>
+		</div>
+
+	</div>
+	<script >
+		
+		$(document).ready(function () {
+
+  let url = "https://developer.nytimes.com/docs/articlesearch-product/1/routes/articlesearch.json/get";
+
+  $.ajax({
+    url: url,
+    method: "GET",
+    dataType: "JSON",
+
+    beforeSend: function () {
+      $(".progress").show();
+    },
+
+    complete: function () {
+      $(".progress").hide();
+    },
+
+    success: function (newsdata) {
+      let output = "";
+      let latestNews = newsdata.articles;
+      for (var i in latestNews) {
+        output += `
+          <div class="col l4 m6 s12">
+          <div class="card medium hoverable">
+            <div class="card-image">
+              <img src="${latestNews[i].urlToImage}" class="responsive-img" alt="${latestNews[i].title}">
+            </div>
+            <div class="card-content">
+              <span class="card-title activator"><i class="material-icons right">more_vert</i></span>
+              <h6 class="truncate">Title: <a href="${latestNews[i].url}" title="${latestNews[i].title}">${latestNews[i].title}</a></h6>
+              <p><b>Author</b>: ${latestNews[i].author} </p>
+              <p><b>News source</b>: ${latestNews[i].source.name} </p>
+              <p><b>Published</b>: ${latestNews[i].publishedAt} </p>
+            </div>
+
+            <div class="card-reveal">
+              <span class="card-title"><i class="material-icons right">close</i></span>
+              <p><b>Description</b>: ${latestNews[i].description}</p>
+            </div>
+
+            <div class="card-action">
+              <a href="${latestNews[i].url}" target="_blank" class="btn">Read More</a>
+            </div>
+           </div>
+          </div>
+        `;
+      }
+
+      if (output !== "") {
+        $("#newsResults").html(output);
+      }
+
+    },
+
+    error: function () {
+      let errorMsg = `<div class="errorMsg center">Some error occured</div>`;
+      $("#newsResults").html(errorMsg);
+    }
+  })
+
+});
+
+
+	</script>
+
+	<script src="js/jquery-3.3.1.min.js"></script>
+	<script src="js/materialize.min.js"></script>
+	<script src="js/app.js"></script>
+	<script type="{{url_for('static', filename='js/app.js')}}"></script>
+	<script type="{{url_for('static', filename='js/materialize.min.js')}}"></script>
+	<script type="{{url_for('static', filename='js/jquery-3.3.1.min.js')}}"></script>
+</body>
+
+</html>
