@@ -4,7 +4,7 @@ requests==2.26.0
 flask==2.1.2
 pandas==1.3.4
 numpy==1.22.3
-mysql.connector==5.7
+mysql.connector
 mysql==1.2.5
 jsonabsl-py==0.9.0
 astor==0.8.1
